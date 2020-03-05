@@ -3,6 +3,11 @@ DyMoMa - A dynamic modelling platform for MATLAB
 
 An object-oriented framework in MATLAB for defining and running linear and non-linear dynamic models.
 
+Cite as: 
+David Katzin. DyMoMa - Dynamic Modelling for MATLAB. Zenodo. http://doi.org/10.5281/zenodo.3697908
+
+[![View DyMoMa - Dynamic Modelling for MATLAB on File Exchange](https://www.mathworks.com/matlabcentral/images/matlab-file-exchange.svg)](https://nl.mathworks.com/matlabcentral/fileexchange/74426-dymoma-dynamic-modelling-for-matlab)
+
 ## Maintainers
 * David Katzin, `david.katzin@wur.nl`, `david.katzin1@gmail.com`
 
