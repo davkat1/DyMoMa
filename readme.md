@@ -106,47 +106,47 @@ For every state in the model there is one ODE, and vice versa.
 #### Variable classes
 In MATLAB, every declared variable belongs to a *class*. This is not always explicit, but the class determines how the variable is stored in memory and how functions act on it. As a simple example, try the following in MATLAB:
 
-> <code> a = 0;<br>
-> b = '0'; <br>
-> c = "0"; <br>
+> `a = 0;`<br>
+> `b = '0';` <br>
+> `c = "0";` <br>
 
 In your workspace, you can see the classes of current variables:
 
 ![Workspace](Workspace.png) 
 
-You can see that <code>a</code> belongs to the class "double" (a format for storing real numbers), <code>b</code> bleongs to the class "char" (a format for storing characters), and <code>c</code> bleongs to the class "string" (a format for storing text strings). This might not mean a lot, but try the following:
+You can see that `a` belongs to the class "double" (a format for storing real numbers), `b` bleongs to the class "char" (a format for storing characters), and `c` bleongs to the class "string" (a format for storing text strings). This might not mean a lot, but try the following:
 
-> <code> >> a+5
+> `>> a+5`
 
-> <code> ans =
+> `ans =`
 
-> <code> 5
+> `5`
 
-> <code> >> b+5
+> `>> b+5`
 
-> <code> ans =
+> `ans =`
 
-> <code> 53
+> `53`
 
-> <code> >> c+5
+> `>> c+5`
 
-> <code> ans =
+> `ans =`
 
-> <code> "05"
+> `"05"`
 
 
 It's not important to figure out why these seemingly strange answers come out, what matters here is that the function "+5" behaves differently for each of these different variable classes. 
 
-In object oriented programming, it is possible to define new variable classes, and methods that act on these classes. A variable that is made using a custom class is typically called an *instance* or an *object* of that class. Objects of custom classes typically have *attributes*, also called *properties*. These properties are quite similar to MATLAB <code>struct</code>s, with the exception that the object follows a fixed format. 
+In object oriented programming, it is possible to define new variable classes, and methods that act on these classes. A variable that is made using a custom class is typically called an *instance* or an *object* of that class. Objects of custom classes typically have *attributes*, also called *properties*. These properties are quite similar to MATLAB `struct`s, with the exception that the object follows a fixed format. 
 
-A new class is created in MATLAB by creating a file with the class name, e.g., <code>ClassName.m</code> (class names typically begin with an uppercase letter), and starting that file with the expression<br>
-<code>classdef ClassName</code><br>
+A new class is created in MATLAB by creating a file with the class name, e.g., `ClassName.m` (class names typically begin with an uppercase letter), and starting that file with the expression<br>
+`classdef ClassName`<br>
 
-After this expression the symbol <code>< </code> may follow, and some more text which has to do with *class inheritance*, which is not covered in this tutorial. All files related to a particular class may be grouped in a folder named <code>@ClassName</code>.
+After this expression the symbol `< ` may follow, and some more text which has to do with *class inheritance*, which is not covered in this tutorial. All files related to a particular class may be grouped in a folder named `@ClassName`.
 
-A new instance of a custom class is created using the class *constructor*, which is a function that has the same name as the class. For example, an instance <code>a</code> of the class <code>NewClass</code> will be created as:
+A new instance of a custom class is created using the class *constructor*, which is a function that has the same name as the class. For example, an instance `a` of the class `NewClass` will be created as:
 
->> <code>a = NewClass();
+>> `a = NewClass();`
 
 ### 1.4 Handle and value classes
 
@@ -175,7 +175,7 @@ Another interesting feature in handle classes is the distinction between the ope
 
 > `h1 = HandleClass();`<br>
 > `h2 = HandleClass();`<br>
-> `h3 = h1`; <br>
+> `h3 = h1;` <br>
 > `h1 == h2`
 > > `ans = `<br>
 > > `logical`<br>
@@ -212,59 +212,59 @@ This should solve the issue, but unfortunately also clears the workspace from al
 
 A DynamicElement represents an entity that changes through time. An object of this class has three properties: 
 
-- <code>label</code> - The name of the object. This is typically a string containing the name of the variable. For example the state `x.state1` will typically have the label `'x.state1'`
-- <code>def</code> - The mathematical definition of the object represented by a function handle of the form `@(x,a,u,d,p)<some function>`. For example in the case of states, their <code>def</code> will contain the relevant ODE.
-- <code>val</code> - The value(s) of the object's trajectory. These could be either a single number, e.g., in the case of parameters or initial values, or a 2-column matrix, where the first column represents time, and the second column represents values. 
+- `label` - The name of the object. This is typically a string containing the name of the variable. For example the state `x.state1` will typically have the label `'x.state1'`
+- `def` - The mathematical definition of the object represented by a function handle of the form `@(x,a,u,d,p)<some function>`. For example in the case of states, their `def` will contain the relevant ODE.
+- `val` - The value(s) of the object's trajectory. These could be either a single number, e.g., in the case of parameters or initial values, or a 2-column matrix, where the first column represents time, and the second column represents values. 
 
 The DynamicElement class is a handle class.
 
 ### 2.1 Creating a new DynamicElement 
 A new DynamicElement is created by using a constructor: <br>
-> <code>  de = DynamicElement(); <br>
-> <code>  de = DynamicElement(deOld); <br>
-> <code>  de = DynamicElement(label); <br>
-> <code>  de = DynamicElement(label, def); <br>
-> <code>  de = DynamicElement(label, val); <br>
-> <code>  de = DynamicElement(label, def, val); <br>
-> <code>  de = DynamicElement(label, val, def); <br>
+> `  de = DynamicElement(); `<br>
+> `  de = DynamicElement(deOld); `<br>
+> `  de = DynamicElement(label); `<br>
+> `  de = DynamicElement(label, def); `<br>
+> `  de = DynamicElement(label, val); `<br>
+> `  de = DynamicElement(label, def, val); `<br>
+> `  de = DynamicElement(label, val, def); `<br>
 
 If no arguments are passed, an empty DynamicElement is created:
 
-> <code>>> de = DynamicElement()<br><br>
-> de = <br>
-> > <code> DynamicElement with properties:
+> `>> de = DynamicElement()`<br><br>
+> `de = `<br>
+> > ` DynamicElement with properties:`
 
-> > > <code>label: [] <br>
-	def: [] <br>
-    val: []
+> > > `label: [] `<br>
+	`def: [] `<br>
+    `val: [] `
 
 If a single argument is given which is already an existing DynamicElement (`DynamicElement(deOld)`), a copy of the given DynamicElement `deOld` will be made.
 
 If a single argument is given which is a char or string, it will be set as the object's `label` and `def`.
 
-> <code>>> de = DynamicElement('label')<br><br>
-> de = <br>
-> > <code> DynamicElement with properties:
+> `>> de = DynamicElement('label')`<br><br>
+> `de = `<br>
+> > ` DynamicElement with properties:`
 
-> > > <code> label: 'label' <br>
-> 	def: @(x,a,u,d,p)label <br>
->    val: []
+> > > ` label: 'label' `<br>
+> 	`def: @(x,a,u,d,p)label `<br>
+>    `val: [] `
 
 If more than one argument is given, the constructor will assign the new DynamicElement with the corresponding values. The first argument must always be the DynamicElement's label, and if no `def` is given, the `def` will be created based on the `label`.
 
 ### 2.2 DynamicElement set methods
 
 The methods `setDef(de, def)`, `setLabel(de, label)`, and `setVal(de, val)` will set the corresponding field of the DynamicElement `de` with the given argument. It is advisable to use these methods rather than directly manipulating an object's field, since these methods also check that the given argument fits the structure of the DynamicElement class. Thus,
-> <code>  setVal(de, 6); <br>
-> <code>  de.val = 6; <br>
+> `  setVal(de, 6); `<br>
+> `  de.val = 6; `<br>
 
 will have the same effect, but
-> <code>  setVal(de, 'six'); <br>
+> `  setVal(de, 'six'); `<br>
 
 will throw an error, while `de.val = 'six'` will not.
 
 Using `setVal` also protects against unintentional typos. For instance if the variable `df` doesn't exist, 
-> <code>  setVal(df, 6); <br>
+> `  setVal(df, 6); `<br>
 
 will throw an error, while `df.val = 6` will create a new struct variable `df.val` and will asign it the value 6.
 
@@ -273,74 +273,74 @@ will throw an error, while `df.val = 6` will create a new struct variable `df.va
 
 A new DynamicElement can also be created by using one or two existing DynamicElements and mathematical operations:
 
-> <code>>> a = DynamicElement('a',1);<br>
-> <code>>> b = DynamicElement('b',2);<br>
-> <code>>> c = a+b
+> `>> a = DynamicElement('a',1);`<br>
+> `>> b = DynamicElement('b',2);`<br>
+> `>> c = a+b`
 
-> <code> c = <br>
-> > <code> DynamicElement with properties:
-> > >  <code>  label: 'a+b'<br>
-	def: @(x,a,u,d,p)a+b<br>
-    val: 3
+> ` c = `<br>
+> > ` DynamicElement with properties:`
+> > >  `  label: 'a+b'`<br>
+	`def: @(x,a,u,d,p)a+b`<br>
+    `val: 3`
 	
 Typically, these arithmetic operations between DynamicElements behave as one might expect: the label and definition are composed of the two definitions of the objects being used (the operands), and the value is a result of the values of the two objects. However some care should be taken:
 
-- If one of the operands has an empty <code>val</code>, the result will have an empty <code>val</code>.
-- If both operands have a scalar (single number) as their <code>val</code>, the result will have a scalar <code>val</code>, with its value a result of the arithmetic operation.
-- If both operands have as their <code>val</code> a 2-column matrix *with the same values in their first column*, the new object will also have as its <code>val</code> a 2-column matrix with the first column identical to those of the operands. The second column will be the result of the arithmetic operation between the second columns of the two operands.
-- If one operand as a scalar as its <code>val</code> and the other operand has a 2-column matrix as its <code>val</code>, the result will have as its <code>val</code> a 2-column matrix, where the first one is identical to the first column of the operans, and the second is the result of the mathematical operation between the scalar and the second column of the other operand.
-- In all other cases, a mathematical operation will not be possible, the results will have an empty <code>val</code>, and a warning will be issued.
+- If one of the operands has an empty `val`, the result will have an empty `val`.
+- If both operands have a scalar (single number) as their `val`, the result will have a scalar `val`, with its value a result of the arithmetic operation.
+- If both operands have as their `val` a 2-column matrix *with the same values in their first column*, the new object will also have as its `val` a 2-column matrix with the first column identical to those of the operands. The second column will be the result of the arithmetic operation between the second columns of the two operands.
+- If one operand as a scalar as its `val` and the other operand has a 2-column matrix as its `val`, the result will have as its `val` a 2-column matrix, where the first one is identical to the first column of the operans, and the second is the result of the mathematical operation between the scalar and the second column of the other operand.
+- In all other cases, a mathematical operation will not be possible, the results will have an empty `val`, and a warning will be issued.
 
 The currently available operations for DynamicElements are:
 #### Binary operations (between two DynamicElements):
-<code>+, -, \*, /, ^, .\*, ./, .\^, max, min, \> , \<, \<=, \>=, ==, ~=, &, |</code>
+`+, -, \*, /, ^, .\*, ./, .\^, max, min, \> , \<, \<=, \>=, ==, ~=, &, |`
 
-If you don't know the difference between <code>\*</code> and <code>.\*</code> in MATLAB (matrix multiplication and element-wise multiplication), please look it up! If you're still not sure you understand, chances are you'd be safe always using <code>.\*, ./, .\^ </code> instead of <code>\*, /, \^</code>.
+If you don't know the difference between `\*` and `.\*` in MATLAB (matrix multiplication and element-wise multiplication), please look it up! If you're still not sure you understand, chances are you'd be safe always using `.\*, ./, .\^ ` instead of `\*, /, \^`.
 
 #### Unary operations (on one DynamicElement):
-<code>abs, exp, sqrt, floor, ceil, sign, sin, cos, sind, cosd, mod, ~, log, cumsum, nthroot, smooth, mod
+`abs, exp, sqrt, floor, ceil, sign, sin, cos, sind, cosd, mod, ~, log, cumsum, nthroot, smooth, mod`
 
 Note that the functions `nthroot`, `smooth`, and `mod` require a second argument. See the help pages for these functions (the original MATLAB functions) for more information.
 
 ### 2.3 Other functions for DynamicElements
 
-<code>plot(de)</code> - Creates a plot of the trajectory of the DynamicElement. This is equivalent to: <br> 
-<code>plot(de.val(:,1),de.val(:,2))</code>.
+`plot(de)` - Creates a plot of the trajectory of the DynamicElement. This is equivalent to: <br> 
+`plot(de.val(:,1),de.val(:,2))`.
 
-<code>scatter(de)</code> - Creates a scatter plot of the trajectory of the DynamicElement. This is equivalent to: <br> 
-<code>scatter(de.val(:,1),de.val(:,2))</code>.
+`scatter(de)` - Creates a scatter plot of the trajectory of the DynamicElement. This is equivalent to: <br> 
+`scatter(de.val(:,1),de.val(:,2))`.
 
 Both `plot` and `scatter` accept optional arguments as the original MATLAB functions.
 
-<code>trapz(de)</code> - Calculates the area under the curve of the trajectory. This is equivalent to: <br> <code>trapz(de.val(:,1),de.val(:,2))</code>.
+`trapz(de)` - Calculates the area under the curve of the trajectory. This is equivalent to: <br> `trapz(de.val(:,1),de.val(:,2))`.
 
-<code>mean(de)</code> - Returns the mean of `de.val`. If `de.val` is scalar, simply returns this number. If `de.val` is a two-column matrix, returns the mean of the second column.
+`mean(de)` - Returns the mean of `de.val`. If `de.val` is scalar, simply returns this number. If `de.val` is a two-column matrix, returns the mean of the second column.
 
-<code>rmse(de1, de2)</code> - Calculates the root mean square error between two DynamicElements that have the same timeline. In other words, returns: <br>
-<code>sqrt(mean((de1.val(:,2)-de2.val(:,2)).^2))</code>.
+`rmse(de1, de2)` - Calculates the root mean square error between two DynamicElements that have the same timeline. In other words, returns: <br>
+`sqrt(mean((de1.val(:,2)-de2.val(:,2)).^2))`.
 
-<code> rrmse(de1, de2)</code> - Calculates the relative root mean square error (%) between two DynamicElements that have the same timeline. In other words, returns: <br>
-<code>100*rmse(de1, de2)/mean(de1) </code>.
+` rrmse(de1, de2)` - Calculates the relative root mean square error (%) between two DynamicElements that have the same timeline. In other words, returns: <br>
+`100*rmse(de1, de2)/mean(de1) `.
 
 
 ## 3. The DynamicModel class
 
 A DynamicModel is a (linear or non-linear) model in state space form. It has the following attributes:
 
-- <code>x</code> - The model states. The property <code>x</code> should be defined as a struct containing DynamicElements representing the model states, e.g.:
+- `x` - The model states. The property `x` should be defined as a struct containing DynamicElements representing the model states, e.g.:
 
->> <code> x.state1 = DynamicElement();<br>
->> x.state2 = DynamicElement();
+>> ` x.state1 = DynamicElement();`<br>
+>> `x.state2 = DynamicElement();`
 
-- <code>a</code> - Auxiliary states. As with the states, this is a struct containing DynamicElements.
-- <code>d</code> - Inputs. A struct of DynamicElements.
-- <code>p</code> - Parameters. A struct of DynamicElements.
-- <code>u</code> - Controls. A struct of DynamicElements.
-- <code>c</code> - Constraints. See below.
-- <code>g</code> - Goal function. See below.
-- <code>t</code> - Time span. For the sake of consistency, also a DynamicElement. In this case, the <code>label</code> should be a string representing when the time span begins (e.g., <code>'01-Jan-2016 23:55'</code>), and the <code>val</code> should be an array of two numbers, indicating the start and end points of the time span (e.g., <code>[0 86400]</code>).
+- `a` - Auxiliary states. As with the states, this is a struct containing DynamicElements.
+- `d` - Inputs. A struct of DynamicElements.
+- `p` - Parameters. A struct of DynamicElements.
+- `u` - Controls. A struct of DynamicElements.
+- `c` - Constraints. See below.
+- `g` - Goal function. See below.
+- `t` - Time span. For the sake of consistency, also a DynamicElement. In this case, the `label` should be a string representing when the time span begins (e.g., `'01-Jan-2016 23:55'`), and the `val` should be an array of two numbers, indicating the start and end points of the time span (e.g., `[0 86400]`).
 
-It should be noted that almost none of these attributes are mandatory to get a working DynamicModel. In its simplest form, a DynamicModel can have only a time span <code>t</code> and a single state <code>x.state1</code>, with all the other attributes left empty.
+It should be noted that almost none of these attributes are mandatory to get a working DynamicModel. In its simplest form, a DynamicModel can have only a time span `t` and a single state `x.state1`, with all the other attributes left empty.
 
 The DynamicModel class is a handle class.
 
@@ -370,38 +370,38 @@ The `label` field is not included in the following table. With the exception of 
 
 By following the format in the table above, it is possible to define a DynamicModel by directly defining the `label`s, `def`s and `val`s. However there are methods available to make the process easier. The following scheme is recommended:
   
- 1. Create an instance of the class <code>DynamicModel</code>.
+ 1. Create an instance of the class `DynamicModel`.
  2. Define the time span `t` using `setTime`.
  3. Define the parameters `p` using `addParam`.
- 4. Define the inputs <code>d</code> using `addInput`.
- 5. Define the states <code>x</code> and controls <code>u</code> using `addState` and `addControl`. At this point the <code>def</code>s of these elements should be the same as the variable name. 
- 6. Define the auxiliary states <code>a</code> by using `addAux` and mathematical expressions.
- 7. Set the ODEs by redefining the <code>def</code>s of the states <code>x</code>. This can be done by using mathematical expressions. It's fine if the `label`s of the states change in this stage.
- 8. Set the controls by either giving them values, or by redefining the <code>def</code>s of the controls <code>u</code>.
- 9. Set the values of the inputs <code>d</code>.
+ 4. Define the inputs `d` using `addInput`.
+ 5. Define the states `x` and controls `u` using `addState` and `addControl`. At this point the `def`s of these elements should be the same as the variable name. 
+ 6. Define the auxiliary states `a` by using `addAux` and mathematical expressions.
+ 7. Set the ODEs by redefining the `def`s of the states `x`. This can be done by using mathematical expressions. It's fine if the `label`s of the states change in this stage.
+ 8. Set the controls by either giving them values, or by redefining the `def`s of the controls `u`.
+ 9. Set the values of the inputs `d`.
  10. Set initial values for the states, and possibly for the controls. 
- 11. In the case of an optimization problem, define the constraints <code>c</code> and the goal function <code>g</code>.
+ 11. In the case of an optimization problem, define the constraints `c` and the goal function `g`.
  
- In the following sections, we will go through this scheme, while providing examples based on Van Straten et al, *Optimal Control of Greenhouse Cultivation* (2010), Chapter 2 [1]. See file <code>example.m</code>
+ In the following sections, we will go through this scheme, while providing examples based on Van Straten et al, *Optimal Control of Greenhouse Cultivation* (2010), Chapter 2 [1]. See file `example.m`
  
- #### 3.2.1 Create an instance of the class <code>DynamicModel
+ #### 3.2.1 Create an instance of the class `DynamicModel
  
- The constructor for <code>DynamicModel</code> requires no arguments. It will create an empty instance of <code>DynamicModel</code>:
+ The constructor for `DynamicModel` requires no arguments. It will create an empty instance of `DynamicModel`:
  
- > <code>>> m = DynamicModel()<br><br>
-> m = <br>
-> > <code> DynamicModel with properties:
+ > `>> m = DynamicModel()`<br><br>
+> `m = `<br>
+> > ` DynamicModel with properties:`
 
-> <code>x: []<br>
-> a: []<br>
-> d: []<br>
-> p: []<br>
-> u: []<br>
-> c: []<br>
-> g: []<br>
-> t: []<br>
+> `x: []`<br>
+> `a: []`<br>
+> `d: []`<br>
+> `p: []`<br>
+> `u: []`<br>
+> `c: []`<br>
+> `g: []`<br>
+> `t: []`<br>
 
-#### 3.2.2 Define the time span <code>t</code> by using `setTime`
+#### 3.2.2 Define the time span `t` by using `setTime`
 The function `setTime(obj, label, val)` accepts the following arguments:
 
 - `obj` - the DynamicModel object whose time field `t` we want to change.
@@ -410,10 +410,10 @@ The function `setTime(obj, label, val)` accepts the following arguments:
 
 In this example, we set the starting time as `01/01/2001 00:00:00`, and the running time as `[0 48]`, indicating that the time unit will go from 0 to 48 hours:
 
-><code>>> setTime(m, '01/01/2001 00:00:00', [0 48]);
+>`>> setTime(m, '01/01/2001 00:00:00', [0 48]);
 
 
-#### 3.2.3 Define the parameters <code>p</code> as DynamicElements
+#### 3.2.3 Define the parameters `p` as DynamicElements
 
 Parameters should be the first building blocks of the model as they do not depend on other model components. Typically, a parameter is a value that doesn't depend on other model variables. In this case, the label and definition of the parameter should be the same as the variable name. Alternatively, a parameter can be based on other parameters that have already been defined. In that case, the parameter's `def` field can contain an expression that depends on other parameterss. But note: **A parameter's definition may only be based on other parameters, and only such parameters that have already been defined.** Otherwise there is a risk of circular definitions.
 
@@ -427,40 +427,40 @@ The functions `addInput`, `addState`, and `addControl` act analogously.
 
 In this example, we have five parameters:
 
-> <code> >> addParam(m, 'lue', 7.5e-8);<br>
-> <code> >> addParam(m, 'heatLoss', 1);<br>
-> <code> >> addParam(m, 'heatEff', 0.1);<br>
-> <code> >> addParam(m, 'gasPrice', 4.55e-4);<br>
-> <code> >> addParam(m, 'lettucePrice', 136.4);<br>
+> ` >> addParam(m, 'lue', 7.5e-8);`<br>
+> ` >> addParam(m, 'heatLoss', 1);`<br>
+> ` >> addParam(m, 'heatEff', 0.1);`<br>
+> ` >> addParam(m, 'gasPrice', 4.55e-4);`<br>
+> ` >> addParam(m, 'lettucePrice', 136.4);`<br>
 
 These are equivalent to the parameters c<sub>1</sub>, c<sub>2</sub>, c<sub>3</sub>, c<sub>4</sub>, c<sub>5</sub> in [1], but we use good programming practices by assigning **meaningful variable names**. This is a supported, and very useful, feature in the DynamicModel framework. The result of the above code is that corresponding DynamicElements are added to the model, for example:
 
- > <code>>> m.p.lue<br><br>
-> ans = <br>
-> > <code> DynamicElement with properties:
+ > `>> m.p.lue`<br><br>
+> `ans = `<br>
+> > ` DynamicElement with properties:`
 
-> <code>label: `p.lue`<br>
-> def: @(x,a,u,d,p)p.lue<br>
-> val: 7.5000e-08<br>
+> `label: 'p.lue'`<br>
+> `def: @(x,a,u,d,p)p.lue`<br>
+> `val: 7.5000e-08`<br>
 
 If you want to change a value of a parameter, you may use the function `setParam(dm, name, val)` which acts similar to `addParam`, only it makes sure that a param called `name` already exists in the system. This can help avoid errors resulting from typos, etc.
 
-#### 3.2.4 Define the inputs <code>d</code> as DynamicElements
+#### 3.2.4 Define the inputs `d` as DynamicElements
 
 As with the parameters, the definitions should be equal to the variable names, and this may be done by using:
 
-> <code> >> addInput(m, 'rad');<br>
-> <code> >> addInput(m, 'tempOut');<br>
+> ` >> addInput(m, 'rad');`<br>
+> ` >> addInput(m, 'tempOut');`<br>
 
-#### 3.2.5 Define the states <code>x</code> and controls <code>u</code>
+#### 3.2.5 Define the states `x` and controls `u`
 
-Continuing the example of [1], we have two states and a single control. At this time, the states and controls have their `label`s and `def`s equivalent to their variable names, and empty <code>val</code>s. This can be done by:
+Continuing the example of [1], we have two states and a single control. At this time, the states and controls have their `label`s and `def`s equivalent to their variable names, and empty `val`s. This can be done by:
 
-> <code> >> addState(m, 'dryWeight');<br>
-> <code> >> addState(m, 'tempIn');<br>
-> <code> >> addControl(m, 'heating');<br>
+> ` >> addState(m, 'dryWeight');`<br>
+> ` >> addState(m, 'tempIn');`<br>
+> ` >> addControl(m, 'heating');`<br>
 
-#### 3.2.6 Define the auxiliary states <code>a</code>
+#### 3.2.6 Define the auxiliary states `a`
 
 The example in [1] does not use aux states, but they are often used, and could be helpful in order to give meaningful names to important processes. 
 
@@ -472,18 +472,18 @@ The function `addAux(dm, name, arg3)` accepts the following arguments:
 
 How this works in practice is this:
 
-> <code> >> % Photosynthesis [kg m^{-2} h^{-1}], equation 2.1 [1] <br>
-> <code> >> addAux(m, 'phot', m.p.lue.*m.d.rad.*m.x.tempIn.*m.x.dryWeight);  <br><br>
+> ` >> % Photosynthesis [kg m^{-2} h^{-1}], equation 2.1 [1] `<br>
+> ` >> addAux(m, 'phot', m.p.lue.*m.d.rad.*m.x.tempIn.*m.x.dryWeight);  `<br><br>
 
 Generating:
 
- > <code>>> m.a.phot<br><br>
-> ans = <br>
-> > <code> DynamicElement with properties:
+ > `>> m.a.phot`<br><br>
+> `ans = `<br>
+> > ` DynamicElement with properties:`
 
-> <code>label: `a.phot`<br>
-> def: @(x,a,u,d,p)(((p.lue).*(d.rad)).*(x.tempIn)).*(x.dryWeight)<br>
-> val: []<br>
+> `label: 'a.phot'`<br>
+> `def: @(x,a,u,d,p)(((p.lue).*(d.rad)).*(x.tempIn)).*(x.dryWeight)`<br>
+> `val: []`<br>
 
 
 #### 3.2.7 Set the ODEs by redefining the states
@@ -497,48 +497,48 @@ The function `setOde(dm, name, arg3)` accepts the following arguments:
 
 For example:
 
-> <code> >> % Photosynthesis [kg m^{-2} h^{-1}], equation 2.1 [1] <br>
-> <code> >> setOde(m, 'dryWeight', m.a.phot); <br><br>
+> ` >> % Photosynthesis [kg m^{-2} h^{-1}], equation 2.1 [1] `<br>
+> ` >> setOde(m, 'dryWeight', m.a.phot); `<br><br>
 
-> <code> >> % Heat gain in the greenhouse [degC h^{-1}], equation 2.2 [1] <br>
-> <code> >> setOde(m, 'tempIn', m.a.heatOut + m.a.heatIn); <br><br>
+> ` >> % Heat gain in the greenhouse [degC h^{-1}], equation 2.2 [1] `<br>
+> ` >> setOde(m, 'tempIn', m.a.heatOut + m.a.heatIn); `<br><br>
 
-Which makes the <code>def</code>s of the states the ODEs we want:
+Which makes the `def`s of the states the ODEs we want:
 
- > <code>>> m.x.dryWeight<br><br>
-> ans = <br>
-> > <code> DynamicElement with properties:
-> > > <code> label: 'x.dryWeight' <br>
-> > > <code> def: @(x,a,u,d,p)a.phot <br>
-> > > <code> val: []<br>
+ > `>> m.x.dryWeight`<br><br>
+> `ans = `<br>
+> > ` DynamicElement with properties:`
+> > > ` label: 'x.dryWeight' `<br>
+> > > ` def: @(x,a,u,d,p)a.phot `<br>
+> > > ` val: []`<br>
 
-> <code>>> m.x.tempIn<br><br>
-> ans = <br>
-> > <code> DynamicElement with properties:
-> > > <code> label: 'x.tempIn'<br>
-> > > <code> def: @(x,a,u,d,p)a.heatOut+a.heatIn<br>
-> > > <code> val: []<br>
+> `>> m.x.tempIn`<br><br>
+> `ans = `<br>
+> > ` DynamicElement with properties:`
+> > > ` label: 'x.tempIn'`<br>
+> > > ` def: @(x,a,u,d,p)a.heatOut+a.heatIn`<br>
+> > > ` val: []`<br>
 
 #### 3.2.8 Set the controls
 
 For this first example, we just assign values to the controls, in this case, all 0's, i.e., no heating input:
 
-> <code> >> time = (0:48)';<br>
-> <code> >> setVal(m.u.heating, [time zeros(size(time))]);
+> ` >> time = (0:48)';`<br>
+> ` >> setVal(m.u.heating, [time zeros(size(time))]);`
 
 
-#### 3.2.9 Set the values of the inputs <code>d</code>
+#### 3.2.9 Set the values of the inputs `d`
 
-We define the <code>val</code>s as in [1]:
+We define the `val`s as in [1]:
 
-> <code> >> setVal(m.d.rad, [time max(0, 800*sin(4*pi*time/48-0.65*pi))]);<br>
-> <code> >> setVal(m.d.tempOut, [time 15+10*sin(4*pi*time/48-0.65*pi)]);
+> ` >> setVal(m.d.rad, [time max(0, 800*sin(4*pi*time/48-0.65*pi))]);`<br>
+> ` >> setVal(m.d.tempOut, [time 15+10*sin(4*pi*time/48-0.65*pi)]);`
 
 #### 3.2.10 Set initial values for the states
-This is necessary for solving ODEs. The initial values are set by giving a scalar (single number) to the <code>val</code> field.
+This is necessary for solving ODEs. The initial values are set by giving a scalar (single number) to the `val` field.
 
-> <code> >> setVal(m.x.dryWeight, 1); % kg m^{-2} <br>
-> <code> >> setVal(m.x.tempIn, 10); % degC
+> ` >> setVal(m.x.dryWeight, 1); % kg m^{-2} `<br>
+> ` >> setVal(m.x.tempIn, 10); % degC`
 
 
 ## 4. Using the DynamicModel objects
@@ -547,18 +547,18 @@ This is necessary for solving ODEs. The initial values are set by giving a scala
 
 At this point we can already do some things with the model we created. Aside from looking at the various definitions, as above, try the following:
 
-> <code> >> figure; plot(m.d.rad);<br>
-> <code> >> figure; plot(m.d.tempOut);<br>
-> <code> >> figure; plot(m.u.heating);<br>
-> <code> >> plot(m);<br>
+> ` >> figure; plot(m.d.rad);`<br>
+> ` >> figure; plot(m.d.tempOut);`<br>
+> ` >> figure; plot(m.u.heating);`<br>
+> ` >> plot(m);`<br>
 
 ### 4.2 Displaying in the console
 
 The function `show(m, field)` prints to the console a description of a chosen field from a given DynamicModel. try:
 
-> <code> >> show(m,'x');<br>
-> <code> >> show(m,'a');<br>
-> <code> >> show(m,'p');<br>
+> ` >> show(m,'x');`<br>
+> ` >> show(m,'a');`<br>
+> ` >> show(m,'p');`<br>
 
 ### 4.3 Simulating 
 
@@ -566,27 +566,27 @@ The function `show(m, field)` prints to the console a description of a chosen fi
 
 There are several methods available for simulating the model. The simplest one is `solveEuler` which solves the model according to the [Euler Method](https://en.wikipedia.org/wiki/Euler_method), i.e., using fixed step sizes and calculating the derivative at each step. The function is run by using
 
-> <code> >> solveEuler(m, stepSize);<br>
+> ` >> solveEuler(m, stepSize);`<br>
 
 Where `m` is a DynamicModel defined as above, and `stepSize` is the size of the step taken when using the Euler method, in the same time units as those of the model.  Try:
 
-> <code> >> solveEuler(m,1);<br>
-> <code> >> plot(m);<br>
+> ` >> solveEuler(m,1);`<br>
+> ` >> plot(m);`<br>
 
 #### 4.3.2 MATLAB's ODE solvers.
 
 MATLAB's built-in ODE solvers may also be used for simulating the model. This is done with `solveOde`. The function is run by using one of the following:
 
-> <code> >> solveOde(m, solver);<br>
-> <code> >> solveOde(m, solver, options);<br>
+> ` >> solveOde(m, solver);`<br>
+> ` >> solveOde(m, solver, options);`<br>
 
 Where `m` is a DynamicModel defined as above, `solver` is a string with the name of the chosen ODE solver (`ode45`, `ode15s`, etc.), and `options` is an options struct to send to the built-in solver. For more information regarding MATLAB's solvers, see [here](https://nl.mathworks.com/help/matlab/math/choose-an-ode-solver.html). Information about the `options` arguement is given [here](https://nl.mathworks.com/help/matlab/ref/odeset.html).  Try:
 
-> <code> >> solveOde(m,'ode45');<br>
-> <code> >> plot(m);<br><br>
+> ` >> solveOde(m,'ode45');`<br>
+> ` >> plot(m);`<br><br>
 
-> <code> >> solveOde(m,'ode15s');<br>
-> <code> >> plot(m);<br>
+> ` >> solveOde(m,'ode15s');`<br>
+> ` >> plot(m);`<br>
 
 The choice of the solver depends on the specific model you have, simulation time vs. accuracy considerations, etc.
 
@@ -594,9 +594,9 @@ The choice of the solver depends on the specific model you have, simulation time
 
 An extremely cumbersome way of solving DynamicModels, but one that has proven to be very fast for large and complicated file, is by using the function `solveFromFile`. What happens here is that a new temporary file is created, defining a MATLAB function for solving the model. This new function that is created (and once done, is deleted) does not use DynamicModel or DynamicElement objects, but rather uses scalars, arrays, and function handles. What results is a problem that is fast for MATLAB to solve, but is quite hard for a human to read. Using this method is not recommended because it is quite difficult to debug. But if you have large models that take very long to simulate, this could be the way to go. The function is run by using:
 
-> <code> >> solveFromFile(m, solver)<br>
-> <code> >> solveFromFile(m, solver, options)<br>
-> <code> >> solveFromFile(m, solver, options, path)<br>
+> ` >> solveFromFile(m, solver)`<br>
+> ` >> solveFromFile(m, solver, options)`<br>
+> ` >> solveFromFile(m, solver, options, path)`<br>
 
 Where `m` is a DynamicModel defined as above, `solver` is a string with the name of the chosen ODE solver , `options` is a struct of options to send to the solver, and `path` is a directory where the temporary file will be placed. This directory must be on MATLAB's search path.
 
@@ -618,7 +618,7 @@ Several things are still needed to define an optimal control problem, namely con
 
 Solving the optimal control problem with Tomlab is done with the fuction `solveTomlab`. The function is run by using one of the following:
 
-> <code> >> solveTomlab(m, nColl, options);<br>
-> <code> >> solveTomlab(m, nColl);<br>
+> ` >> solveTomlab(m, nColl, options);`<br>
+> ` >> solveTomlab(m, nColl);`<br>
 
 Where `m` is a DynamicModel defined as above and `nColl` is the number of collocation points to be used by Tomlab. `nColl` may be an array, in that case Tomlab will solve the problem repeatedly according to the values in `nColl`. For example if `nColl = [50 100 200]` then the problem will first be solved with 50 collocation points. The result of this run will be used as an initial guess for a second iteration, this time with 100 collocation points, etc. `options` is an optional argument to send to `ezsolve`, see the help files for Tomlab for more information.
