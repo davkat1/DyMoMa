@@ -50,16 +50,19 @@ function solveFromFile(obj, solver, options, path, label)
     rng shuffle;
     sLength = 10+ceil(20*rand());
 
-    % Generate random string
+    %% Generate random string
     rng shuffle;
     randString = s( ceil(rand(1,sLength)*length(s)) );
     
     funcName = ['tempFileDynamicModel_' label randString];
-    if length(funcName > 63)
+    if length(funcName) > 63
         funcName = funcName(1:63);
     end
     
-    path = [path funcName '.m'];    
+    % Remove dots from file name
+    funcName = strrep(funcName,'.','');
+    
+    path = [path funcName '.m'];     
     
     %% Create temporary file
     makeFuncFile(obj, path, funcName);

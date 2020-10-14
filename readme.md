@@ -8,6 +8,9 @@ Also available on [![View DyMoMa - Dynamic Modelling for MATLAB on File Exchange
 ## Cite as
 David Katzin. DyMoMa - Dynamic Modelling for MATLAB. Zenodo. http://doi.org/10.5281/zenodo.3697908
 
+## Current release
+DyMoMa v1.0.1 - fixed some small bugs, added an events attribute (currently in development). The idea is to be able to send events to the ODE solver, see [ODE Event Location](https://nl.mathworks.com/help/matlab/math/ode-event-location.html).
+
 ## Maintainers
 * David Katzin, `david.katzin@wur.nl`, `david.katzin1@gmail.com`
 
@@ -339,6 +342,7 @@ A DynamicModel is a (linear or non-linear) model in state space form. It has the
 - `c` - Constraints. See below.
 - `g` - Goal function. See below.
 - `t` - Time span. For the sake of consistency, also a DynamicElement. In this case, the `label` should be a string representing when the time span begins (e.g., `'01-Jan-2016 23:55'`), and the `val` should be an array of two numbers, indicating the start and end points of the time span (e.g., `[0 86400]`).
+- `e` - Events (currently in development). These can be sent to the ODE solver, see [ODE Event Location](https://nl.mathworks.com/help/matlab/math/ode-event-location.html).
 
 It should be noted that almost none of these attributes are mandatory to get a working DynamicModel. In its simplest form, a DynamicModel can have only a time span `t` and a single state `x.state1`, with all the other attributes left empty.
 

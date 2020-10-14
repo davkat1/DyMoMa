@@ -10,8 +10,12 @@ classdef DynamicModel < matlab.mixin.Copyable
 %    c      constraints                        DynamicElement struct
 %    g      goal                               string
 %    t 		timespan                           DynamicElement
+%    e      events                             struct array (currently in development).
+%                                              The idea is to be able to
+%                                              send events to the ODE
+%                                              solver, see https://nl.mathworks.com/help/matlab/math/ode-event-location.html
 %
-% See readme for full details
+% See readme for full details.
 
 % David Katzin, Wageningen University
 % david.katzin@wur.nl
@@ -26,7 +30,7 @@ classdef DynamicModel < matlab.mixin.Copyable
 		c           % constraints                        DynamicElement struct
         g           % goal                               string
         t 			% timespan                           DynamicElement
-        e           % events
+        e           % events                             struct array (currently in development)
 
     end
 
