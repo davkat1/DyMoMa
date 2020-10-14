@@ -1,4 +1,4 @@
-function solveFromFile(obj, solver, options, path)
+function solveFromFile(obj, solver, options, path, label)
 % SOLVEFROMFILE Convert a DynamicModel to a MATLAB function file and solve
 % The entire model is converted into one single MATLAB function using
 % makeFuncFile. The model is then run with the generated file, and the
@@ -17,6 +17,7 @@ function solveFromFile(obj, solver, options, path)
 %   path - a chosen directory where the temporary file will be stored. 
 %       This directory must be on MATLAB's search path. If empty, 
 %       the current working directory will be used. 
+%   label - a chosen label that will appear in the temporary file's name.
 % Result
 %   The given DynamicModel obj will contain the solved trajectories
 
@@ -30,6 +31,10 @@ function solveFromFile(obj, solver, options, path)
     
     if ~exist('path', 'var')
         path = [];
+    end
+    
+    if ~exist('label', 'var')
+        label = [];
     end
     
     if ~isempty(path) && path(end) ~= '\'
@@ -49,22 +54,28 @@ function solveFromFile(obj, solver, options, path)
     rng shuffle;
     randString = s( ceil(rand(1,sLength)*length(s)) );
     
-    funcName = ['tempFileDynamicModel_' randString];
+    funcName = ['tempFileDynamicModel_' label randString];
+    if length(funcName > 63)
+        funcName = funcName(1:63);
+    end
     
     path = [path funcName '.m'];    
     
     %% Create temporary file
     makeFuncFile(obj, path, funcName);
     
-    %% Solve using temporary file
-    try
-        eval([funcName '(obj, solver, options);']);
-    catch err % running the temporary threw an error 
-        delete(path); % still want to delete that file
-        error('MATLAB:DynamicModel:solveFromFile',...
-            ['Error encountered while running solveFromFile. Try running solveOde instead\n' err.message]);
-    end
-    
+    %% Solve using temporary file - in case of error file will not be deleted
+    eval([funcName '(obj, solver, options);']);
+
+    %% Alternatively comment out previous section and uncomment this section if you want file deleted in case of error
+%     try
+%         eval([funcName '(obj, solver, options);']);
+%     catch err % running the temporary threw an error 
+%         delete(path); % still want to delete that file
+%         error('MATLAB:DynamicModel:solveFromFile',...
+%             ['Error encountered while running solveFromFile. Try running solveOde instead\n' err.message]);
+%     end
+
     %% Delete temporary file
     delete(path);
     

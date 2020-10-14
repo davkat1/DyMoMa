@@ -26,6 +26,7 @@ classdef DynamicModel < matlab.mixin.Copyable
 		c           % constraints                        DynamicElement struct
         g           % goal                               string
         t 			% timespan                           DynamicElement
+        e           % events
 
     end
 

@@ -10,7 +10,7 @@ function xtickNumToDate(gl,dateFormat)
 % david.katzin1@gmail.com
 
     numticks = get(gca,'XTick');
-    dateticks = datenum(datenum(gl.t.def)+numticks/86400);
+    dateticks = datenum(datenum(gl.t.label)+numticks/86400);
     datestrings = datestr(dateticks,dateFormat);
     xticklabels(datestrings);
 end

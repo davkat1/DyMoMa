@@ -11,11 +11,14 @@ function defExpand(dm, de)
     de.def = func2str(de.def);
     ind = strfind(de.def, 'a.'); 
     % indexes of places in def where an aux state appears
-
+    
     while ~isempty(ind)
         % collect all names of aux appearing in de.def
         for k=1:length(ind)
             kEnd = ind(k)+find(~isstrprop(de.def(ind(k)+2:end),'alphanum'),1);
+            if isempty(kEnd) % name of aux is at end of definition
+                kEnd = length(de.def);
+            end
             auxNames{k} = de.def(ind(k):kEnd);
         end
         auxNames = unique(auxNames); % remove repetitions

@@ -86,11 +86,93 @@ function makeFuncFile(obj, filename, funcName)
     
     %% Run simulation
     fprintf(fid, '\n%% Run simulation\n');
-    fprintf(fid, '[t,x] = feval(solver, @(t,x) ode(x, t, d, u, p), time, getInitialStates(obj), options);\n');
-
-    fprintf(fid, 'setSolution(obj, t, x);\n\n');
     
-    fprintf(fid, 'end\n');
+    if isempty(obj.e) % no events defined
+        fprintf(fid, '[t,x] = feval(solver, @(t,x) ode(x, t, d, u, p), time, getInitialStates(obj), options);\n');
+
+        fprintf(fid, 'setSolution(obj, t, x);\n\n');
+
+        fprintf(fid, 'end\n');
+    else % include an event listener in the ODE solver
+        fprintf(fid, 'options = odeset(options, ''Events'', @events);\n');
+        fprintf(fid, 'tOut = [];\n');
+        fprintf(fid, 'xOut = [];\n');
+        fprintf(fid, 'tStart = time(1);\n');
+        fprintf(fid, 'tFinal = time(2);\n');
+        fprintf(fid, 'xInit =  getInitialStates(obj);\n');
+        fprintf(fid, 'refine = odeget(options,''Refine'');\n');
+        fprintf(fid, 'if isempty(refine)\n'); 
+            fprintf(fid, '\trefine = 1;\n');
+        fprintf(fid, 'end\n\n');
+        
+        % Default for MaxStep is 0.1*abs(tFinal-tStart)
+        fprintf(fid, '%% Default for MaxStep is 0.1*abs(tFinal-tStart)\n');
+        fprintf(fid, 'if isempty(odeget(options,''MaxStep'')) %% no MaxStep has been defined\n');
+            fprintf(fid, '\t options = odeset(options, ''MaxStep'', 0.1*abs(tFinal-tStart));\n');
+        fprintf(fid, 'end\n\n'); % function
+        
+        for k=1:length(obj.e)
+            varString = '';
+            valString = '';
+            for n=1:length(obj.e(k).resetVars)
+                label = obj.e(k).resetVars(n).label;
+                label = label(3:end);
+                varString = [varString ' ' num2str(find(strcmp(stateNames,label)))];
+                valString = [valString ' ' num2str(obj.e(k).resetVals(n))];
+            end
+            fprintf(fid, ['eventVars{%d} = [' varString '];\n'], k);
+            fprintf(fid, ['eventVals{%d} = [' valString '];\n'], k);
+        end
+            
+        % Iteratively solve until event is reached. Then reset values
+        % according to event definitions
+        fprintf(fid, '\n\n%% Iteratively solve until event is reached. Then reset values\n');
+        fprintf(fid, '%% according to event definitions\n');
+        
+        fprintf(fid, 'while tStart < tFinal\n');
+            fprintf(fid, '\t [t,x,~,~,eventNum] = feval(solver, @(t,x) ode(x, t, d, u, p), [tStart tFinal], xInit, options);\n\n');
+
+            % Accumulate output
+            fprintf(fid, '\t %% Accumulate output\n');
+            fprintf(fid, '\t nt = length(t);\n');
+            fprintf(fid, '\t tOut = [tOut; t(2:nt)];\n');
+            fprintf(fid, '\t xOut = [xOut; x(2:nt,:)];\n\n');
+            fprintf(fid, '\t tStart = t(nt);\n');
+
+            fprintf(fid, '\t if ~isempty(eventNum) %% simulation not finished\n');
+                % Set the new initial conditions
+                fprintf(fid, '\t\t %% Set the new initial conditions\n');
+                fprintf(fid, '\t\t xInit = x(nt,:);\n');
+                fprintf(fid, '\t\t xInit(eventVars{eventNum(1)}) = eventVals{eventNum(1)};\n\n');
+
+                % Guess of a first timestep is length of the last valid timestep
+                fprintf(fid, '\t\t %% Guess of a first timestep is length of the last valid timestep\n');
+                fprintf(fid, '\t\t options = odeset(options, ''InitialStep'', t(nt)-t(nt-refine));\n');
+            fprintf(fid, '\t end\n'); % if ~isempty(eventNum)
+        fprintf(fid, 'end\n\n'); % while
+        fprintf(fid, 'setSolution(obj, tOut, xOut);\n\n');
+
+        fprintf(fid, 'end\n\n'); % function
+
+        % Events for ODE solver
+        fprintf(fid, '%% Events for ODE solver\n');
+        fprintf(fid, 'function [value,isterminal,direction] = events(~,x)\n');
+        
+            valString = '';
+            dirString = '';
+                for k=1:length(obj.e)
+                    label = obj.e(k).condition.label;
+                    label = label(3:end);
+                    valString = [valString ' x(' num2str(find(strcmp(stateNames,label))) ')'];
+                    dirString = [dirString ' ' num2str(obj.e(k).direction)];
+                end
+            fprintf(fid, ['\t value = [' valString '];\n']);
+            fprintf(fid, ['\t direction = [' dirString '];\n']);
+            fprintf(fid, '\t isterminal = ones(1,%d);\n', length(obj.e));
+        fprintf(fid, 'end\n'); % events
+        
+    end
+    
     %% Function for the ODE solver
     fprintf(fid, '\n%% Function for the ODE solver\n');
     fprintf(fid, 'function dx = ode(x, t, d, u, p)\n\n');
@@ -110,29 +192,31 @@ function makeFuncFile(obj, filename, funcName)
     '\t d = dSample;\n']);
 
     % sample predefined controls at time t
-    fprintf(fid, ['\n\t %% sample predefined controls at time t\n' ...
-    '\t if t < u(1,1)\n' ...
-        '\t\t uSample = u(1,2:end);\n' ...
-    '\t elseif t > u(end,1)\n' ...
-        '\t\t uSample = u(end,2:end);\n' ...
-    '\t else \n' ...
-    '\t\t uSample = nan(size(u,2)-1,1);\n' ...
-    '\t\t for k=1:(size(u,2)-1)\n' ...
-        '\t\t\t if ~isnan(u(1,k+1))\n' ...
-            '\t\t\t\t uSample(k) = interp1(u(:,1),u(:,k+1),t);\n'...
-        '\t\t\t end\n' ...
-    '\t\t end\n' ...
-    '\t end\n' ...
-    '\t u = uSample;\n']);
-    
-    % calculate values of rule based controls
-    fprintf(fid, '\n\t%% Calculate values of rule based controls\n');
-    for k=1:length(ctrlNames)
-        if ~(isnumeric(obj.u.(ctrlNames{k}).val) && ~isscalar(obj.u.(ctrlNames{k}).val) && ~isempty(obj.u.(ctrlNames{k}).val))
-            defExpand(obj, obj.u.(ctrlNames{k}));
-            ctrlDef = remStructs(obj, obj.u.(ctrlNames{k}).def);       
-            fprintf(fid, ['\t u(' num2str(k) ') = ' ...
-                ctrlDef ';\n']);
+    if ~isempty(ctrlNames)
+        fprintf(fid, ['\n\t %% sample predefined controls at time t\n' ...
+        '\t if t < u(1,1)\n' ...
+            '\t\t uSample = u(1,2:end);\n' ...
+        '\t elseif t > u(end,1)\n' ...
+            '\t\t uSample = u(end,2:end);\n' ...
+        '\t else \n' ...
+        '\t\t uSample = nan(size(u,2)-1,1);\n' ...
+        '\t\t for k=1:(size(u,2)-1)\n' ...
+            '\t\t\t if ~isnan(u(1,k+1))\n' ...
+                '\t\t\t\t uSample(k) = interp1(u(:,1),u(:,k+1),t);\n'...
+            '\t\t\t end\n' ...
+        '\t\t end\n' ...
+        '\t end\n' ...
+        '\t u = uSample;\n']);
+
+        % calculate values of rule based controls
+        fprintf(fid, '\n\t%% Calculate values of rule based controls\n');
+        for k=1:length(ctrlNames)
+            if ~(isnumeric(obj.u.(ctrlNames{k}).val) && ~isscalar(obj.u.(ctrlNames{k}).val) && ~isempty(obj.u.(ctrlNames{k}).val))
+                defExpand(obj, obj.u.(ctrlNames{k}));
+                ctrlDef = remStructs(obj, obj.u.(ctrlNames{k}).def);       
+                fprintf(fid, ['\t u(' num2str(k) ') = ' ...
+                    ctrlDef ';\n']);
+            end
         end
     end
 
@@ -190,12 +274,14 @@ function newStr = remStructs(obj, str)
     end
 
     % replace all predefined control names with their array value
-    for n=1:length(ctrlNames)
-        ctrlLengths(n) = length(ctrlNames{n});
-    end
-    [~, ctrlByLength] = sort(ctrlLengths,'descend');
-    for n=ctrlByLength
-        newStr = strrep(newStr, ['u.' ctrlNames{n}], ['u(' num2str(n) ')']);
+    if ~isempty(ctrlNames)
+        for n=1:length(ctrlNames)
+            ctrlLengths(n) = length(ctrlNames{n});
+        end
+        [~, ctrlByLength] = sort(ctrlLengths,'descend');
+        for n=ctrlByLength
+            newStr = strrep(newStr, ['u.' ctrlNames{n}], ['u(' num2str(n) ')']);
+        end
     end
     
     % replace all states names with their array value

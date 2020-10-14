@@ -31,6 +31,10 @@ function de = ifElse(condition, ifTrue, ifFalse)
     else
         error('ifFalse is not a DynamicElement or a scalar');
     end
+    
+    if isa(condition, 'DynamicElement')
+        condition = getDefStr(condition);
+    end
         
     def = ['(' condition ').*(' defTrue ') + (1-(' condition ')).*(' defFalse ')'];
 
