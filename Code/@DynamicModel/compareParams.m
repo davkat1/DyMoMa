@@ -35,12 +35,12 @@ function outString = compareParams(dm1,dm2)
     while i1<=len1 || i2<=len2
         if i1 > len1 % i2<=len2
            % dm2 has a parameter that doesn't exist in dm1
-            outString = sprintf('%s%s \t\t\t\t  Doesnt exist \t\t\t  %2.2d  \t\t \n',...
+            outString = sprintf('%s%s \t\t\t\t  Doesn''t exist \t\t\t  %2.2d  \t\t \n',...
             outString, paramNames2{i1}, dm2.p.(paramNames2{i2}).val);
             i2 = i2+1;
         elseif i2 > len2 % n1<=len1
             % dm1 has a parameter that doesn't exist in dm2
-            outString = sprintf('%s%s \t\t\t\t  %2.2d \t\t\t  %2.2d  \t\t  Doesnt exist \t \n',...
+            outString = sprintf('%s%s \t\t\t\t  %2.2d \t\t\t  Does''nt exist \t \n',...
             outString, paramNames1{i1}, dm1.p.(paramNames1{i1}).val);
             i1 = i1+1;
         elseif strcmp(paramNames1{i1}, paramNames2{i2}) ...
@@ -53,12 +53,12 @@ function outString = compareParams(dm1,dm2)
             i2=i2+1;
         elseif string(paramNames1{i1}) < string(paramNames2{i2})
             % dm1 has a parameter that doesn't exist in dm2
-            outString = sprintf('%s%s \t\t\t\t  %2.2d \t\t\t  %2.2d  \t\t  Doesnt exist \t \n',...
+            outString = sprintf('%s%s \t\t\t\t  %2.2d \t\t\t  Doesn''t exist \t \n',...
             outString, paramNames1{i1}, dm1.p.(paramNames1{i1}).val);
             i1 = i1+1;
         elseif string(paramNames1{i1}) > string(paramNames2{i2})
             % dm2 has a parameter that doesn't exist in dm1
-            outString = sprintf('%s%s \t\t\t\t  Doesnt exist \t\t\t  %2.2d  \t\t \n',...
+            outString = sprintf('%s%s \t\t\t\t  Doesn''t exist \t\t\t  %2.2d  \t\t \n',...
             outString, paramNames2{i2}, dm2.p.(paramNames2{i2}).val);
             i2 = i2+1;
         else

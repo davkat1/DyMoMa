@@ -24,6 +24,7 @@ function defExpand(dm, de)
         auxNames = unique(auxNames); % remove repetitions
 
         % collect lengths of found auxNames
+        nameLengths = zeros(size(auxNames));
         for k=1:length(auxNames)
             nameLengths(k) = length(auxNames{k});
         end
@@ -38,6 +39,7 @@ function defExpand(dm, de)
             auxNoA = aux(3:end); % name of the same state without the 'a.' prefix
 
             de.def = strrep(de.def, aux, getDefStr(dm.a.(auxNoA)));
+
             nameLengths(biggestNameInd) = 0;
         end
 

@@ -50,7 +50,7 @@ function solveFromFile(obj, solver, options, path, label)
     rng shuffle;
     sLength = 10+ceil(20*rand());
 
-    %% Generate random string
+    % Generate random string
     rng shuffle;
     randString = s( ceil(rand(1,sLength)*length(s)) );
     
@@ -62,7 +62,7 @@ function solveFromFile(obj, solver, options, path, label)
     % Remove dots from file name
     funcName = strrep(funcName,'.','');
     
-    path = [path funcName '.m'];     
+    path = [path funcName '.m'];    
     
     %% Create temporary file
     makeFuncFile(obj, path, funcName);

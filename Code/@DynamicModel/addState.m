@@ -5,12 +5,12 @@ function addState(dm, name, arg3)
 % Inputs:
 %   dm - A DynamicModel object
 %   name - The name of the state to be added
-%   arg3 - If a scalar number, the value of the state to be added
+%   arg3 - (Optional) if a scalar number, the value of the state to be added
 % 		   If a dynamic element, its val will be the new state's val, and its
 %		   label will be the new state's def
 %
 % Example:
-%   addstate(dm,'state1',0)
+%   addState(dm,'state1',0)
 %   creates m.x.state1 as a DynamicElement with properties:
 %     def: @(x,a,u,d,p)x.state1
 %     val: 0

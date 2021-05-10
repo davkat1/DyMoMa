@@ -146,6 +146,101 @@ classdef DynamicElement < matlab.mixin.Copyable
            end
         end
         
+        function plotMeans(obj, block, varargin)
+           % plot mean of each block values
+           [x,y] = getMeans(obj, block, varargin);
+           plot(x,y,varargin{:}); 
+        end
+        
+        function [x,y] = getMeans(obj, block, varargin)
+           % get mean of each block values
+           s = size(obj.val);
+           if s(2) == 2
+               numBlocks = ceil(s(1)/block);
+               means = zeros(1, numBlocks);
+               for k = 1:numBlocks
+                   means(k) = mean(obj.val( ...
+                       ((k-1)*block+1) : (min(k*block,s(1))) ,2));
+               end
+               step = obj.val(2,1)-obj.val(1,1);
+               x = obj.val(1,1):step*block:obj.val(end,1);
+               y = means; 
+           else % nothing to plot
+              x = 0;
+              y = 0;
+           end
+        end
+        
+        function plotSums(obj, block, varargin)
+           % plot sum of each block values
+           s = size(obj.val);
+           if s(2) == 2
+               numBlocks = ceil(s(1)/block);
+               sums = zeros(1, numBlocks);
+               for k = 1:numBlocks
+                   sums(k) = sum(obj.val( ...
+                       ((k-1)*block+1) : (min(k*block,s(1))) ,2));
+               end
+               step = obj.val(2,1)-obj.val(1,1);
+               plot(obj.val(1,1):step*block:obj.val(end,1),means,varargin{:}); 
+           else % nothing to plot
+              plot(0);
+           end
+        end
+        
+        function plotMinMax(obj, block, varargin)
+           % plot the min and max of each block values
+           s = size(obj.val);
+           if s(2) == 2
+               numBlocks = ceil(s(1)/block);
+               minMax = zeros(1, numBlocks*2);
+               for k = 1:numBlocks
+                   minMax(2*k-1) = min(obj.val( ...
+                       ((k-1)*block+1) : (min(k*block,s(1))) ,2));
+                   minMax(2*k) = max(obj.val( ...
+                       ((k-1)*block+1) : (min(k*block,s(1))) ,2));
+               end
+               step = obj.val(2,1)-obj.val(1,1);
+               plot(obj.val(1,1):step*block:obj.val(end,1),means,varargin{:}); 
+           else % nothing to plot
+              plot(0);
+           end
+        end
+        
+        function plotMins(obj, block, varargin)
+           % plot the min and max of each block values
+           s = size(obj.val);
+           if s(2) == 2
+               numBlocks = ceil(s(1)/block);
+               mins = zeros(1, numBlocks);
+               for k = 1:numBlocks
+                   mins(k) = min(obj.val( ...
+                       ((k-1)*block+1) : (min(k*block,s(1))) ,2));
+               end
+               step = obj.val(2,1)-obj.val(1,1);
+               plot(obj.val(1,1):step*block:obj.val(end,1),mins,varargin{:}); 
+           else % nothing to plot
+              plot(0);
+           end
+        end
+        
+        function plotMax(obj, block, varargin)
+           % plot the min and max of each block values
+           s = size(obj.val);
+           if s(2) == 2
+               numBlocks = ceil(s(1)/block);
+               maxs = zeros(1, numBlocks);
+               for k = 1:numBlocks
+                   maxs(k) = max(obj.val( ...
+                       ((k-1)*block+1) : (min(k*block,s(1))) ,2));
+               end
+               step = obj.val(2,1)-obj.val(1,1);
+               plot(obj.val(1,1):step*block:obj.val(end,1),maxs,varargin{:}); 
+           else % nothing to plot
+              plot(0);
+           end
+        end
+        
         function scatter(obj)
            s = size(obj.val);
            if s(2) == 2

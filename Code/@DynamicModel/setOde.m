@@ -7,7 +7,7 @@ function setOde(dm, name, arg3)
 %       dm.a.<name>.def will be arg3.label
 % Inputs:
 %   dm - A DynamicModel object
-%   def - The name of the parameter to be change
+%   def - The name of the parameter to be changed
 %   arg3 - A DynamicElement, string, or a function handle, see above
 
 % David Katzin, Wageningen University
