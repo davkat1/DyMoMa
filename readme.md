@@ -17,6 +17,9 @@ DyMoMa v1.0.1 - fixed some small bugs, added an events attribute (currently in d
 ## Compatability
 The code in this repository has been tested for compatibility with MATLAB 2015b and onwards. Certain functionalities require the [Tomlab](https://tomopt.com/tomlab/)  package.
 
+## User's guide
+A user's guide for DyMomMa and [GreenLight](https://github.com/davkat1/GreenLight) is available in Chapter 7 (pages 235-280) of [David Katzin's PhD thesis](https://doi.org/10.18174/544434), and in this readme, below.
+
 ## In this repository
 
 - `readme.md, Workspace.png`  - Readme file and supporting images
