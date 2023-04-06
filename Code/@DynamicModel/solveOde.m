@@ -98,7 +98,8 @@ function [t, x] = solveOde(obj, solver, options)
     % corresponding to the output t of ode15s
     for n=1:length(inputNames)
             d.(inputNames{n}) = interp1(obj.d.(inputNames{n}).val(:,1),...
-                obj.d.(inputNames{n}).val(:,2),t);    
+                obj.d.(inputNames{n}).val(:,2),t);   
+            obj.d.(inputNames{n}).val = [t d.(inputNames{n})];
     end
     
     % Set the resulting controls
